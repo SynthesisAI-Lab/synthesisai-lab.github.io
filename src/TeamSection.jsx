@@ -122,7 +122,7 @@ const TeamSection = () => {
             role: 'Researcher',
             title: 'PhD Student @UIUC',
             image: miaoImg,
-            website: 'https://www.linkedin.com/in/yuanxun-w-427327178?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app'
+            website: 'https://www.linkedin.com/in/yuanxun-w-427327178?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app',
         },
         {
             name: 'Jooeun Shim',

@@ -109,32 +109,33 @@ const TeamSection = () => {
             title: 'PhD Student @UIUC',
             image: boImg,
             website: 'https://www.boshui.site/',
-        }, 
+        },
         {
             name: 'Cong Wang',
             role: 'Researcher',
             title: 'PhD Student @UIUC',
             image: congImg,
             website: 'https://www.linkedin.com/in/cong-wang-b560aa290/?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app',
-        },     
-         {
+        },   
+       {
             name: 'Miaomiao Wei',
             role: 'Researcher',
             title: 'PhD Student @UIUC',
             image: miaoImg,
             website: 'https://www.linkedin.com/in/yuanxun-w-427327178?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app',
-        },
+        },  
         {
             name: 'Jooeun Shim',
             role: 'Collaborator',
             title: 'Assistant Professor of Teaching @Columbia University',
             image: jooeunImg,
             website: 'https://www.tc.columbia.edu/faculty/js4719/'
+    
         },
-         {
+        {
             name: 'Ishita Asnani',
-            role: 'Developer (Former Member)',
-            title: 'Undergrad Intern @UIUC',
+            role: 'Developer (Intern, Summer25)',
+            title: 'Undergrad Student @UIUC',
             image: ishitaImg,
             website: 'https://www.linkedin.com/in/ishita-asnani/',
         }, 

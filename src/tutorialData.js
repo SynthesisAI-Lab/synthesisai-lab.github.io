@@ -1,110 +1,112 @@
 // Preload tutorial images via Vite glob so they are included in the build and work with a dynamic lookup.
-const images = import.meta.glob('./assets/tutorial_assets/**/*.{png,jpg,jpeg}', { eager: true, import: 'default' });
-const asset = (path) => images[`./assets/tutorial_assets/${path}`];
+const images = import.meta.glob('./assets/tutorial_assets/v2/**/*.{png,jpg,jpeg}', { eager: true, import: 'default' });
+const asset = (path) => images[`./assets/tutorial_assets/v2/${path}`];
 
-export const signInSteps = [
+export const getStartedSteps = [
     {
-        image: asset('1_sign_in/1_home.png'),
-        title: 'Welcome to Synthesis AI Lab',
-        description: 'Start on the home page to begin your journey of knowledge synthesis.'
+        image: asset('1_get_started/1_sign_in.png'),
+        title: 'Sign In or Try the Demo',
+        description: 'Click "Login" to sign in, or "Sign up" to create an account. No account yet? Click "Try the Demo" to explore an example course as an instructor or a student.'
     },
     {
-        image: asset('1_sign_in/2_sign_up.png'),
-        title: 'Sign up or Sign in',
-        description: 'Use your email to create an account or sign in and access all features.'
+        image: asset('1_get_started/2_join_course.png'),
+        title: 'Join Your Course',
+        description: 'Click "Join Course by Code" and enter the invite code shared by your instructor.'
     },
     {
-        image: asset('1_sign_in/3_home_logged_in.png'),
-        title: 'Student Dashboard',
-        description: 'Click “Join Group by Code” and enter the code shared by your instructor to join your class. Once joined, you will see all available synthesis workspaces created by your instructor in the left panel.'
+        image: asset('1_get_started/3_course_modules.png'),
+        title: 'Courses & Modules',
+        description: [
+            'Your courses appear in the left panel. Open one to see its modules.',
+            'Each module shows its Synthesis Prompt (the writing task you are working toward) and its readings.',
+            'Click "Annotate" to read and discuss, or "Synthesize" to open the Synthesis Canvas.'
+        ]
     }
 ];
 
-export const workspaceSteps = [
+export const courseSetupSteps = [
     {
-        image: asset('2_workspace/2_new_workspace.png'),
-        title: 'Manage Your Class Group & Create Synthesis Workspaces (instructor only)',
+        image: asset('2_course_setup/1_new_course.png'),
+        title: 'Create a Course',
+        description: 'Click "New Course" on the home page, then give the course a name and an optional description.'
+    },
+    {
+        image: asset('2_course_setup/2_members_groups.png'),
+        title: 'Members & Groups',
         description: [
-            'Click "User Group Management" to create/manage your class group. This will generate an invite code to share with your students.',
-            'Create a new workspace for each synthesis task.',
-            'Click a workspace to upload readings and student discussion data.'
+            'Open "Members and Groups" to copy the course invite code, or a ready-made invite message, for your students.',
+            'Create groups and assign students to them. In a group module, each group keeps its own graph, chat, and draft.'
         ]
     },
     {
-        image: asset('2_workspace/4_annotation_upload.png'),
-        title: 'Upload Annotations & Readings',
-        description: 'Click "New Annotation" and follow the prompts to upload student annotations and the required readings.'
+        image: asset('2_course_setup/3_module_customization.png'),
+        title: 'Module Customization',
+        description: [
+            'Click "New Module" for each synthesis task, then open "Customization".',
+            '**Collaboration Type**: students work in groups or as one class.',
+            '**AI Agents**: choose which agents students can @-mention. Discussion Partner is always available.',
+            'Add the **Synthesis Prompt** on the module card, and **Guiding Questions** on each reading.'
+        ]
     },
     {
-        image: asset('2_workspace/9_open_workspace.png'),
-        title: 'Dive Into the Annotations',
-        description: 'Click "Open" to enter the Synthesis Canvas and start synthesizing the annotations.'
+        image: asset('2_course_setup/4_upload_reading.png'),
+        title: 'Upload Readings',
+        description: 'Click "New Reading" and drop in a PDF. SAIL reads the title and authors from the file for you to check, then extracts the full text and generates an AI summary.'
+    }
+];
+
+export const annotationSteps = [
+    {
+        image: asset('3_annotation_space/1_highlight_thread.png'),
+        title: 'Highlight & Start a Thread',
+        description: 'Select a passage in the reading and click "Add Annotation". Write your comment to start a discussion thread on that passage.'
+    },
+    {
+        image: asset('3_annotation_space/2_peer_reply.png'),
+        title: 'Reply to Peers',
+        description: 'Click "Reply" to respond to a classmate. Threads build up next to the reading, and they become the raw material for your group\'s Synthesis Graph.'
     }
 ];
 
 export const synthesisCanvasSteps = [
     {
-        image: asset('3_synthesis_canvas/1_synthesis_canvas_panels.png'),
+        image: asset('4_synthesis_canvas/1_overview.png'),
         title: 'Synthesis Canvas Overview',
-        description: 'The canvas is divided into three panels: Synthesis Graph, AI Partner, and Synthesis Editor. Each panel can be resized and minimized as needed.'
-    },
-    {
-        image: asset('3_synthesis_canvas/2_generate_graph.png'),
-        title: 'Knowledge Synthesis Graph Generation',
-        description: 'Click "Interactive Build" in the top-left corner, then click "Start Build". The AI will generate a base synthesis graph based on student annotations, assigned readings, and any instructor-provided inputs.'
-    },
-    {
-        image: asset('3_synthesis_canvas/3_annotation_highlight.png'),
-        title: 'Knowledge Synthesis Graph Overview ',
         description: [
-            'Click on any of these nodes or cards to view details.',
-            'Annotations (shown as blue nodes) are connected to themes, represented as Synthesis Nodes displayed in square cards.',
-            'Synthesis Nodes may include formal claims, as well as key ideas or emerging insights that do not yet fit a strict claim structure.',
+            '**Synthesis Graph** (left): your group\'s shared argument, built from your annotations.',
+            '**Group Chat** (middle): talk with teammates and AI agents.',
+            '**Synthesis Editor** (right): co-write the synthesis draft.',
+            'Panels can be resized or collapsed.'
         ]
     },
     {
-        image: asset('3_synthesis_canvas/4_graph_interaction.png'),
-        title: 'Graph Iteraction',
-        description: 'In the Synthesis canvas, users can further iterate on the base synthesis graph by analyzing connections across student ideas.',
-        
-    },
-    {
-        image: asset('3_synthesis_canvas/7_AI_conversation.png'),
-        title: 'Graph Iteraction with Your AI Partner',
+        image: asset('4_synthesis_canvas/2_graph_structure.png'),
+        title: 'Synthesis Graph Structure',
         description: [
-            '**Focus the AI Partner**: When you click on annotations or Synthesis Nodes, your selections are sent to the AI Partner. This tells the AI what you are currently focusing on.',
-            '**Summarize Selected Content**: Use the Summarize button to generate a summary of selected Synthesis Nodes or an annotation thread.',
-            '**Modify the Graph**: Click "Modify Graph" to ask the AI to suggest improvements to the synthesis graph.',
-            '**Graph to Text**: Click "Graph to Text" to generate a draft written synthesis based on the current state of the synthesis graph.'
-
+            '**Claims** are the arguments your group is advancing. **Key Points** are higher-level ideas that rise above several claims.',
+            '**Annotation Threads** hold your discussions, and each comment links to a Claim or Key Point.',
+            'Every link is an **epistemic relation**. Its Stance is "+ build toward" or "− push back", and its Function is Ground, Explain & Elaborate, New Idea, or Question.',
+            'Click a link, or drag a comment onto a node, to edit the relation and add a **Synthesis Note**.'
         ]
     },
     {
-        image: asset('3_synthesis_canvas/8_inline_text_insert.png'),
-        title: 'Inline Text Insert',
-        description: 'You can insert AI-generated text directly into the synthesis text editor with one click'
+        image: asset('4_synthesis_canvas/3_collaboration_history.png'),
+        title: 'Real-time Collaboration & Edit History',
+        description: 'Edit the graph together: you see teammates\' cursors and changes live. Click "History" to see every change, who made it, and when.'
     },
     {
-        image: asset('3_synthesis_canvas/9_graph_to_text.png'),
-        title: 'Graph to Text',
-        description: 'Generate a synthesis draft based on the knowledge graph. The AI Partner will create a structured and draft text that you can further edit in the Text Editor.'
+        image: asset('4_synthesis_canvas/4_group_chat_agents.png'),
+        title: 'Group Chat with AI Agents',
+        description: [
+            'Messages go to your teammates. An AI agent replies only when you @-mention it.',
+            '**Discussion Partner**: an open-ended thinking partner.',
+            '**Idea Finder**: finds what your group already said, with links back to each annotation.',
+            '**Idea Builder**: helps you connect, advance, and check your ideas against the task.'
+        ]
     },
-    // {
-    //     image: asset('3_synthesis_canvas/9_graph_to_text.png'),
-    //     title: 'Backlink Reference*',
-    //     description: 'Annotations and claims referenced in the Synthesis Editor link back to the Knowledge Graph so you can trace ideas and view their original context. * Coming soon'
-    // // },
     {
-        image: asset('3_synthesis_canvas/10_synthesis_export.png'),
-        title: 'Synthesis Export',
-        description: 'Export your synthesis as .txt or .md file for further use and sharing.'
-    }
-];
-
-export const snapshotSteps = [
-    {
-        image: asset('4_interaction_snapshot/0_placeholder.jpeg'),
-        title: 'Interaction Snapshot',
-        description: 'Under development, stay tuned for updates.'
+        image: asset('4_synthesis_canvas/5_citation_chips.png'),
+        title: 'Cite Your Ideas in the Synthesis',
+        description: 'In the Synthesis Editor, type "/" to cite a Claim or an annotation. Click a citation chip to highlight it in the graph.'
     }
 ];

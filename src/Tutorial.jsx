@@ -1,14 +1,16 @@
 import React, { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { Layout, Typography, Button, Tabs, theme, Row, Col, Grid, ConfigProvider } from 'antd';
-import { RocketOutlined, PlayCircleOutlined, LeftOutlined, RightOutlined, CommentOutlined, DeploymentUnitOutlined, EditOutlined, FileTextOutlined, ArrowRightOutlined, FolderAddOutlined } from '@ant-design/icons';
-import { signInSteps, workspaceSteps, synthesisCanvasSteps, snapshotSteps } from './tutorialData';
+import { RocketOutlined, PlayCircleOutlined, LeftOutlined, RightOutlined, CommentOutlined, DeploymentUnitOutlined, EditOutlined, ArrowRightOutlined, FolderAddOutlined, TeamOutlined, HighlightOutlined, ExperimentOutlined } from '@ant-design/icons';
+import { getStartedSteps, courseSetupSteps, annotationSteps, synthesisCanvasSteps } from './tutorialData';
 import TeamSection from './TeamSection';
 
 const { Header, Content, Footer } = Layout;
 const { Title, Paragraph } = Typography;
 const { useBreakpoint } = Grid;
 
-const landingImage = new URL('./assets/tutorial_assets/landing_page.png', import.meta.url).href;
+const APP_URL = 'http://74.249.196.43/v2/';
+
+const landingImage = new URL('./assets/tutorial_assets/v2/landing_page.png', import.meta.url).href;
 
 // Import techy font
 const fontLink = document.createElement('link');
@@ -189,12 +191,12 @@ const StepViewer = ({ steps, onNextTab, onPrevTab, isActive, onStepChange, targe
 const ProjectBigPicture = ({ innerRef, activeStep, onStepClick }) => {
     const screens = useBreakpoint();
     const steps = [
-        { icon: <CommentOutlined />, title: <>Social Annotation<br />of Course Readings</> },
-        { icon: <RocketOutlined />, title: <>User Registration<br />and Log In</> },
-        { icon: <FolderAddOutlined />, title: <>Synthesis Workspace Setup<br />(instructor only)</> },
-        { icon: <DeploymentUnitOutlined />, title: <>Knowledge Synthesis<br />Graph Generation</> },
-        { icon: <EditOutlined />, title: <>Human–AI<br />Collaborative Graph Iteration</> },
-        { icon: <FileTextOutlined />, title: <>Graph-to-Text<br />Synthesis</> },
+        { icon: <TeamOutlined />, title: <>Join<br />a Course</> },
+        { icon: <FolderAddOutlined />, title: <>Course & Module Setup<br />(instructor only)</> },
+        { icon: <HighlightOutlined />, title: <>Annotate & Discuss<br />the Readings</> },
+        { icon: <DeploymentUnitOutlined />, title: <>Knowledge Synthesis<br />Graph</> },
+        { icon: <CommentOutlined />, title: <>Iterate with Your Group<br />& AI Agents</> },
+        { icon: <EditOutlined />, title: <>Co-write<br />the Synthesis</> },
     ];
 
     return (
@@ -204,8 +206,8 @@ const ProjectBigPicture = ({ innerRef, activeStep, onStepClick }) => {
                     How It Works
                 </Title>
                 <div style={{ textAlign: 'center', marginBottom: 15, color: '#707070', fontSize: '1rem', lineHeight: 1.8 }}>
-                    SAIL’s AI partner helps students analyze and connect ideas from their text-based discussions. 
-                    <br />In the current demo, these discussions take place as social annotations on the <a href="https://app.perusall.com/" target="_blank" rel="noopener noreferrer" style={{ color: '#4f46e5', textDecoration: 'none' }}>Perusall</a> platform.
+                    Students annotate course readings together, turn their discussions into a shared knowledge graph with AI agents,
+                    <br />and co-write a synthesis that cites the ideas it builds on.
                     <br /><br />Click the icons to explore the workflow. <br />
                 </div>
                 <Row gutter={[8, 16]} justify="center" align="stretch" style={{ marginBottom: 20 }}>
@@ -218,7 +220,7 @@ const ProjectBigPicture = ({ innerRef, activeStep, onStepClick }) => {
                             <React.Fragment key={index}>
                                 <Col xs={24} sm={12} md={3} style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start' }}>
                                     <div
-                                        onClick={() => index !== 0 && onStepClick(index)}
+                                        onClick={() => onStepClick(index)}
                                         style={{
                                             display: 'flex',
                                             flexDirection: 'column',
@@ -228,7 +230,7 @@ const ProjectBigPicture = ({ innerRef, activeStep, onStepClick }) => {
                                             opacity: 1,
                                             transform: isActive ? 'scale(1.05)' : 'scale(1)',
                                             transition: 'all 0.3s ease',
-                                            cursor: index === 0 ? 'default' : 'pointer'
+                                            cursor: 'pointer'
                                         }}
                                     >
                                         <div style={{
@@ -242,12 +244,11 @@ const ProjectBigPicture = ({ innerRef, activeStep, onStepClick }) => {
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             boxShadow: isActive ? '0 4px 12px rgba(22, 119, 255, 0.3)' : 'none',
-                                            transition: 'all 0.3s ease',
-                                            opacity: index === 0 ? 0.5 : 1
+                                            transition: 'all 0.3s ease'
                                         }}>
                                             {step.icon}
                                         </div>
-                                        <div style={{ fontSize: '0.82rem', fontWeight: isActive ? 600 : 400, lineHeight: 1.3, color: '#333', opacity: index === 0 ? 0.5 : 1 }}>
+                                        <div style={{ fontSize: '0.82rem', fontWeight: isActive ? 600 : 400, lineHeight: 1.3, color: '#333' }}>
                                             {step.title}
                                         </div>
                                     </div>
@@ -277,7 +278,6 @@ const Tutorial = ({ onGoHome }) => {
     const [activeTab, setActiveTab] = useState('1');
     const [tabSteps, setTabSteps] = useState({ '1': 0, '2': 0, '3': 0, '4': 0 });
     const [targetStepMap, setTargetStepMap] = useState({ '1': null, '2': null, '3': null, '4': null });
-    const [lastClickedIcon, setLastClickedIcon] = useState(0);
     const tutorialSectionRef = useRef(null);
     const howItWorksRef = useRef(null);
 
@@ -300,40 +300,11 @@ const Tutorial = ({ onGoHome }) => {
         setTabSteps(prev => ({ ...prev, [tabKey]: step }));
     }, []);
 
+    // How It Works icon -> [tab, step]
+    const BIG_PICTURE_TARGETS = [['1', 0], ['2', 0], ['3', 0], ['4', 1], ['4', 3], ['4', 4]];
+
     const handleBigPictureClick = (index) => {
-        let targetTab = '1';
-        let targetStep = 0;
-
-        setLastClickedIcon(index);
-
-        switch (index) {
-            case 0:
-                targetTab = '1';
-                targetStep = 0;
-                break;
-            case 1:
-                targetTab = '1';
-                targetStep = 0;
-                break;
-            case 2:
-                targetTab = '2';
-                targetStep = 0;
-                break;
-            case 3:
-                targetTab = '3';
-                targetStep = 0;
-                break;
-            case 4:
-                targetTab = '3';
-                targetStep = 2;
-                break;
-            case 5:
-                targetTab = '3';
-                targetStep = 6;
-                break;
-            default:
-                break;
-        }
+        const [targetTab, targetStep] = BIG_PICTURE_TARGETS[index] || ['1', 0];
 
         setActiveTab(targetTab);
         setTargetStepMap(prev => ({ ...prev, [targetTab]: targetStep }));
@@ -343,12 +314,13 @@ const Tutorial = ({ onGoHome }) => {
     };
 
     const getActiveBigPictureStep = () => {
-        if (activeTab === '1') return lastClickedIcon;
-        if (activeTab === '2') return 2;
-        if (activeTab === '3') {
-            const step = tabSteps['3'];
+        if (activeTab === '1') return 0;
+        if (activeTab === '2') return 1;
+        if (activeTab === '3') return 2;
+        if (activeTab === '4') {
+            const step = tabSteps['4'];
             if (step <= 1) return 3;
-            if (step <= 5) return 4;
+            if (step <= 3) return 4;
             return 5;
         }
         return -1;
@@ -379,23 +351,23 @@ const Tutorial = ({ onGoHome }) => {
     const items = useMemo(() => [
         {
             key: '1',
-            label: 'Sign Up & Log-in',
-            children: <StepViewer steps={signInSteps} onNextTab={handleNextTab} isActive={activeTab === '1'} onStepChange={(s) => updateTabStep('1', s)} targetStep={targetStepMap['1']} />,
+            label: 'Get Started',
+            children: <StepViewer steps={getStartedSteps} onNextTab={handleNextTab} isActive={activeTab === '1'} onStepChange={(s) => updateTabStep('1', s)} targetStep={targetStepMap['1']} />,
         },
         {
             key: '2',
-            label: 'Workspace',
-            children: <StepViewer steps={workspaceSteps} onNextTab={handleNextTab} onPrevTab={handlePrevTab} isActive={activeTab === '2'} onStepChange={(s) => updateTabStep('2', s)} targetStep={targetStepMap['2']} />,
+            label: 'Course Setup',
+            children: <StepViewer steps={courseSetupSteps} onNextTab={handleNextTab} onPrevTab={handlePrevTab} isActive={activeTab === '2'} onStepChange={(s) => updateTabStep('2', s)} targetStep={targetStepMap['2']} />,
         },
         {
             key: '3',
-            label: 'Synthesis Canvas',
-            children: <StepViewer steps={synthesisCanvasSteps} onNextTab={handleNextTab} onPrevTab={handlePrevTab} isActive={activeTab === '3'} onStepChange={(s) => updateTabStep('3', s)} targetStep={targetStepMap['3']} />,
+            label: 'Annotation Space',
+            children: <StepViewer steps={annotationSteps} onNextTab={handleNextTab} onPrevTab={handlePrevTab} isActive={activeTab === '3'} onStepChange={(s) => updateTabStep('3', s)} targetStep={targetStepMap['3']} />,
         },
         {
             key: '4',
-            label: 'Interaction Snapshot',
-            children: <StepViewer steps={snapshotSteps} onPrevTab={handlePrevTab} isActive={activeTab === '4'} onStepChange={(s) => updateTabStep('4', s)} targetStep={targetStepMap['4']} />,
+            label: 'Synthesis Canvas',
+            children: <StepViewer steps={synthesisCanvasSteps} onPrevTab={handlePrevTab} isActive={activeTab === '4'} onStepChange={(s) => updateTabStep('4', s)} targetStep={targetStepMap['4']} />,
         },
     ], [handleNextTab, handlePrevTab, activeTab, updateTabStep, targetStepMap]);
 
@@ -423,9 +395,16 @@ const Tutorial = ({ onGoHome }) => {
                 <div style={{ color: '#001529', fontSize: '1.2rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: 10 }}>
                     Synthesis AI Lab <span style={{ fontWeight: 'normal', fontSize: '0.9rem', color: '#888', marginLeft: 8 }}>Tutorial</span>
                 </div>
-                <Button type="primary" icon={<RocketOutlined />} onClick={() => window.location.href = 'http://74.249.196.43/'}>
-                    Launch App
-                </Button>
+                <div style={{ display: 'flex', gap: 8 }}>
+                    {screens.sm && (
+                        <Button icon={<ExperimentOutlined />} onClick={() => window.location.href = APP_URL}>
+                            Try the Demo
+                        </Button>
+                    )}
+                    <Button type="primary" icon={<RocketOutlined />} onClick={() => window.location.href = APP_URL}>
+                        Launch App
+                    </Button>
+                </div>
             </Header>
 
             <Content style={{ overflowY: 'auto', scrollBehavior: 'smooth' }}>
@@ -467,10 +446,20 @@ const Tutorial = ({ onGoHome }) => {
                                 size="middle"
                                 shape="round"
                                 icon={<RocketOutlined />}
-                                onClick={() => window.location.href = 'http://74.249.196.43/'}
+                                onClick={() => window.location.href = APP_URL}
                                 style={{ height: 40, padding: '0 25px', fontSize: 15, borderColor: '#4f46e5', color: '#4f46e5', fontWeight: 500 }}
                             >
                                 Launch App
+                            </Button>
+                            <Button
+                                type="default"
+                                size="middle"
+                                shape="round"
+                                icon={<ExperimentOutlined />}
+                                onClick={() => window.location.href = APP_URL}
+                                style={{ height: 40, padding: '0 25px', fontSize: 15, borderColor: '#4f46e5', color: '#4f46e5', fontWeight: 500 }}
+                            >
+                                Try the Demo
                             </Button>
                         </div>
                         <Paragraph style={{ fontSize: '0.95rem', color: '#999', marginTop: 24 }}>
@@ -480,7 +469,7 @@ const Tutorial = ({ onGoHome }) => {
 
                     <div style={{
                         width: '100%',
-                        maxWidth: 'min(1000px, 160vh)',
+                        maxWidth: 'min(1280px, 180vh)',
                         borderRadius: '16px 16px 0 0',
                         overflow: 'hidden',
                         boxShadow: '0 20px 60px rgba(0,0,0,0.15)',

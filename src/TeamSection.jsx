@@ -1,5 +1,4 @@
 import React from 'react';
-import { Row, Col, Typography, Avatar, Space } from 'antd';
 import { GithubOutlined, LinkedinOutlined, MailOutlined } from '@ant-design/icons';
 import xinranImg from './assets/team/xinran.jpeg';
 import boImg from './assets/team/bo.jpeg';
@@ -9,81 +8,37 @@ import jooeunImg from './assets/team/jooeun.jpg';
 import liamImg from './assets/team/liam.jpeg';
 import miaoImg from './assets/team/miao.jpeg';
 
-const { Title, Paragraph } = Typography;
-
-const TeamMember = ({ name, role, title,image, github, linkedin, email, website }) => {
-    const cardContent = (
-        <div style={{
-            textAlign: 'center',
-            padding: '0',
-            transition: 'transform 0.3s ease',
-            cursor: website ? 'pointer' : 'default'
-        }}
-        onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}
-        onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
-        >
-            {image ? (
-                <img 
-                    src={image} 
-                    alt={name}
-                    style={{
-                        width: 80,
-                        height: 80,
-                        borderRadius: '50%',
-                        marginBottom: 8,
-                        marginLeft: 'auto',
-                        marginRight: 'auto',
-                        objectFit: 'cover',
-                        display: 'block'
-                    }}
-                />
-            ) : (
-                <Avatar
-                    size={80}
-                    style={{ marginBottom: 8, backgroundColor: '#1677ff' }}
-                >
-                    {name.charAt(0).toUpperCase()}
-                </Avatar>
-            )}
-            <Title level={5} style={{ marginBottom: 2, fontSize: '1rem', fontWeight: 600, color: website ? '#4f46e5' : '#000' }}>{name}</Title>
-            <Paragraph style={{ color: '#000', marginBottom: 0, fontSize: '0.875rem' }}>
-                {role}
-            </Paragraph>
-            {title && (
-                <Paragraph style={{ color: '#999', marginBottom: 8, fontSize: '0.725rem', fontWeight: 500 }}>
-                    {title}
-                </Paragraph>
-            )}
-            <Space style={{ gap: '12px' }}>
-                {github && (
-                    <a href={github} target="_blank" rel="noopener noreferrer" style={{ color: '#666', transition: 'color 0.2s' }}>
-                        <GithubOutlined style={{ fontSize: 16 }} />
-                    </a>
-                )}
-                {linkedin && (
-                    <a href={linkedin} target="_blank" rel="noopener noreferrer" style={{ color: '#666', transition: 'color 0.2s' }}>
-                        <LinkedinOutlined style={{ fontSize: 16 }} />
-                    </a>
-                )}
-                {email && (
-                    <a href={`mailto:${email}`} style={{ color: '#666', transition: 'color 0.2s' }}>
-                        <MailOutlined style={{ fontSize: 16 }} />
-                    </a>
-                )}
-            </Space>
-        </div>
-    );
+const TeamMember = ({ name, role, title, image, github, linkedin, email, website }) => {
+    const Card = website ? 'a' : 'div';
+    const linkProps = website ? { href: website, target: '_blank', rel: 'noopener noreferrer' } : {};
 
     return (
-        <Col xs={24} sm={20} md={10} lg={5} style={{ marginBottom: 12 }}>
-            {website ? (
-                <a href={website} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
-                    {cardContent}
-                </a>
+        <Card
+            {...linkProps}
+            className="group flex w-44 flex-col items-center text-center no-underline transition-transform duration-300 hover:-translate-y-1"
+        >
+            {image ? (
+                <img
+                    src={image}
+                    alt={name}
+                    className="mb-3 size-20 rounded-full object-cover ring-2 ring-white shadow-md shadow-gray-200 transition-shadow duration-300 group-hover:shadow-lg group-hover:shadow-brand/20"
+                />
             ) : (
-                cardContent
+                <span className="mb-3 flex size-20 items-center justify-center rounded-full bg-brand text-2xl font-semibold text-white">
+                    {name.charAt(0).toUpperCase()}
+                </span>
             )}
-        </Col>
+            <h5 className={`text-base font-semibold ${website ? 'text-brand' : 'text-gray-900'}`}>{name}</h5>
+            <p className="mt-0.5 text-sm text-gray-800">{role}</p>
+            {title && <p className="mt-0.5 text-xs font-medium text-gray-400">{title}</p>}
+            {(github || linkedin || email) && (
+                <div className="mt-2 flex gap-3 text-gray-500">
+                    {github && <a href={github} target="_blank" rel="noopener noreferrer" className="hover:text-brand"><GithubOutlined /></a>}
+                    {linkedin && <a href={linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-brand"><LinkedinOutlined /></a>}
+                    {email && <a href={`mailto:${email}`} className="hover:text-brand"><MailOutlined /></a>}
+                </div>
+            )}
+        </Card>
     );
 };
 
@@ -142,23 +97,16 @@ const TeamSection = () => {
     ];
 
     return (
-        <div style={{
-            padding: '60px 20px',
-            background: '#ffffff',
-            textAlign: 'center'
-        }}>
-            <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-                <Title level={2} style={{ marginBottom: 9, fontSize: '2rem', fontWeight: 500 }}>Project Team</Title>
-                <Paragraph style={{ fontSize: '1rem', color: '#999', marginBottom: 40 }}>
-                   
-                </Paragraph>
-                <Row gutter={[12, 12]} justify="center">
-                    {team.map((member, index) => (
-                        <TeamMember key={index} {...member} />
+        <section className="bg-white px-5 py-16 text-center">
+            <div className="mx-auto max-w-6xl">
+                <h2 className="text-3xl font-bold tracking-tight text-gray-900">Project Team</h2>
+                <div className="mx-auto mt-10 flex max-w-3xl flex-wrap justify-center gap-x-4 gap-y-8">
+                    {team.map((member) => (
+                        <TeamMember key={member.name} {...member} />
                     ))}
-                </Row>
+                </div>
             </div>
-        </div>
+        </section>
     );
 };
 

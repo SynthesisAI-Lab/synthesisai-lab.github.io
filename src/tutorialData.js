@@ -13,20 +13,23 @@ export const sections = [
             {
                 image: asset('1_get_started/1_sign_in.png'),
                 title: 'Sign In or Try the Demo',
-                description: 'Click "Login" to sign in, or "Sign up" to create an account. No account yet? Click "Try the Demo" to explore an example course as an instructor or a student.'
+                description: [
+                    'Login or Sign up to SAIL.',
+                    'Click "Try the Demo" to explore an example course.'
+                ]
             },
             {
                 image: asset('1_get_started/2_join_course.png'),
                 title: 'Join Your Course',
-                description: 'Click "Join Course by Code" and enter the invite code shared by your instructor.'
+                description: 'Enter the invite code shared by your instructor to join a course.'
             },
             {
                 image: asset('1_get_started/3_course_modules.png'),
                 title: 'Courses & Modules',
                 description: [
-                    'Your courses appear in the left panel. Open one to see its modules.',
-                    'Each module shows its Synthesis Prompt (the writing task you are working toward) and its readings.',
-                    'Click "Annotate" to read and discuss, or "Synthesize" to open the Synthesis Canvas.'
+                    'Open course on the left to view its modules.',
+                    'Check the modules for readings and additional requirements.',
+                    'Click "Annotate" to read and discuss, or "Synthesize" to enter Synthesis Canvas.'
                 ]
             }
         ]
@@ -38,27 +41,27 @@ export const sections = [
         steps: [
             {
                 image: asset('2_social_annotation/1_highlight_thread.png'),
-                title: 'Highlight & Start a Thread',
-                description: 'Select a passage in the reading and click "Add Annotation". Write your comment to start a discussion thread on that passage.'
+                title: 'Highlight & Discuss in Thread',
+                description: 'Highlight a passage in the reading and start a discussion thread.'
             },
             {
                 image: asset('2_social_annotation/2_peer_reply.png'),
                 title: 'Reply to Peers',
-                description: 'Click "Reply" to respond to a classmate. Threads build up next to the reading, and they become the raw material for your group\'s Synthesis Graph.'
+                description: 'Respond to a peer\'s comment, ask questions, and continue the discussion.'
             }
         ]
     },
     {
         key: 'realtime-collaboration',
-        label: ['Realtime Collaboration', 'with Peers'],
+        label: ['Realtime', 'Collaboration'],
         title: 'Realtime Collaboration with Peers',
         steps: [
             {
                 image: asset('3_realtime_collaboration/1_realtime.png'),
                 title: 'Work Together in Real Time',
                 description: [
-                    'The Synthesis Canvas has three panels: the **Synthesis Graph**, the **Group Chat**, and the **Synthesis Editor**.',
-                    'All three are shared with your group in real time. You see your teammates\' cursors in the graph and in the editor, and every edit and message shows up for everyone right away.',
+                    'Three panels wrok together: **Synthesis Graph**, **Group Chat**, and **Synthesis Editor**.',
+                    'All shared with your group in real time. You see your teammates\' cursors in the graph and in the editor, and every edit and message shows up for everyone right away.',
                     'Panels can be resized or collapsed.'
                 ]
             }
@@ -66,15 +69,15 @@ export const sections = [
     },
     {
         key: 'synthesis-graph',
-        label: ['Knowledge Synthesis', 'Graph'],
+        label: ['Synthesis', 'Graph'],
         title: 'Synthesis Graph',
         steps: [
             {
                 image: asset('4_synthesis_graph/1_overview.png'),
                 title: 'Synthesis Graph',
                 description: [
-                    'SAIL builds the graph from your group\'s annotations: each discussion thread is linked to the claims it supports or challenges, and claims can be grouped into higher-level key points.',
-                    'The graph is your group\'s shared map of the argument. It is a starting point for the synthesis, not the final answer.'
+                    'SAIL builds the graph from your group\'s annotations to visualize your thinking.',
+                    'The graph is a starting point for the synthesis.'
                 ]
             },
             {
@@ -82,7 +85,7 @@ export const sections = [
                 title: 'Explore & Refine the Graph',
                 description: [
                     'Zoom in to read the threads behind each claim and how each one relates to it.',
-                    'Add or merge nodes, drag a comment onto a claim to connect them, and leave notes to explain your reasoning.'
+                    'Add or merge nodes, modify relations, and leave notes to explain your reasoning.'
                 ]
             }
         ]
@@ -94,12 +97,12 @@ export const sections = [
         steps: [
             {
                 image: asset('5_group_ai_chat/1_group_chat.png'),
-                title: 'Group Chat with AI Agents',
+                title: 'Group & AI Agent Chat',
                 description: [
-                    'Messages go to your teammates.',
+                    'Chat with your group members and AI agents.',
                     '**Discussion Partner**: an open-ended thinking partner.',
-                    '**Idea Finder**: finds what your group already said, with links back to each annotation.',
-                    '**Idea Builder**: helps you connect and advance your ideas.'
+                    '**Idea Finder**: finds what\'s in the annotations and the Synthesis Graph to ground your ideas.',
+                    '**Idea Builder**: helps you connect and advance your ideas, and check your collaborative progress.'
                 ]
             }
         ]
@@ -112,12 +115,12 @@ export const sections = [
             {
                 image: asset('6_synthesis_editor/1_cowrite.png'),
                 title: 'Write Together',
-                description: 'The editor is one shared document. Everyone in your group writes in the same draft at the same time, and you can see where your teammates are typing.'
+                description: 'One shared document where your group writes in the same draft, and you can see where your teammates are typing.'
             },
             {
                 image: asset('6_synthesis_editor/2_cite.png'),
                 title: 'Cite Your Ideas',
-                description: 'In the Synthesis Editor, type "/" to cite a Claim or an annotation. Click a citation chip to highlight it in the graph.'
+                description: 'Type "/" to cite a Claim or an annotation. Click a citation chip to highlight it in the graph.'
             },
             {
                 image: asset('6_synthesis_editor/3_quote.png'),

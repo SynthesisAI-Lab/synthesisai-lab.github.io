@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import { AnimatePresence, motion as Motion } from 'motion/react';
 import {
-    RocketOutlined, PlayCircleOutlined, LeftOutlined, RightOutlined, ArrowRightOutlined,
+    RocketOutlined, PlayCircleOutlined, CaretRightOutlined, LeftOutlined, RightOutlined, ArrowRightOutlined,
     CommentOutlined, DeploymentUnitOutlined, EditOutlined, LoginOutlined, TeamOutlined,
     HighlightOutlined, ExperimentOutlined,
 } from '@ant-design/icons';
@@ -11,6 +11,10 @@ import TeamSection from './TeamSection';
 const APP_URL = 'http://74.249.196.43/v2/';
 
 const landingImage = new URL('./assets/tutorial_assets/v2/landing_page.png', import.meta.url).href;
+// Served as-is from public/, so the URL stays stable across builds.
+const VIDEO_URL = `${import.meta.env.BASE_URL}video/sail_overview.mp4`;
+const VIDEO_POSTER = `${import.meta.env.BASE_URL}video/sail_overview-poster.jpg`;
+const LOGO_URL = `${import.meta.env.BASE_URL}favicon.svg`;
 
 const SECTION_ICONS = [
     <LoginOutlined />, <HighlightOutlined />, <TeamOutlined />,
@@ -35,8 +39,9 @@ const parseBoldText = (text) =>
 const Header = () => (
     <header className="sticky top-0 z-50 border-b border-gray-100 bg-white/90 backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5">
-            <a href="/" className="text-lg font-bold tracking-tight text-gray-900">
-                Synthesis AI Lab <span className="font-normal text-gray-400">- Homepage</span>
+            <a href="/" className="flex items-center gap-2.5 text-lg font-bold tracking-tight text-gray-900">
+                <img src={LOGO_URL} alt="" className="size-7" />
+                SAIL <span className="font-normal">- Synthesis AI Lab</span>
             </a>
             <div className="flex items-center gap-2">
                 <a href={APP_URL} className="btn-ghost hidden h-9 px-4 text-sm sm:inline-flex">
@@ -91,17 +96,54 @@ const Hero = ({ onStart }) => (
     </section>
 );
 
+// Poster + play button until the visitor clicks, so the video (~15 MB) is
+// only downloaded on demand.
+const VideoSection = () => {
+    const [playing, setPlaying] = useState(false);
+    const videoRef = useRef(null);
+
+    const play = () => {
+        setPlaying(true);
+        requestAnimationFrame(() => videoRef.current?.play());
+    };
+
+    return (
+        <section className="bg-white px-5 pt-20 pb-6">
+            <div className="mx-auto max-w-5xl text-center">
+                <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">See SAIL in Action</h2>
+                <div className="relative mt-8 aspect-video overflow-hidden rounded-2xl bg-gray-900 shadow-[0_20px_60px_rgba(15,23,42,0.18)] ring-1 ring-gray-200/80">
+                    <video
+                        ref={videoRef}
+                        src={VIDEO_URL}
+                        poster={VIDEO_POSTER}
+                        controls={playing}
+                        preload="none"
+                        playsInline
+                        className="block h-full w-full object-cover"
+                    />
+                    {!playing && (
+                        <button
+                            type="button"
+                            onClick={play}
+                            aria-label="Play video"
+                            className="group absolute inset-0 flex cursor-pointer items-center justify-center bg-gray-900/10 transition-colors hover:bg-gray-900/20"
+                        >
+                            <span className="flex size-20 items-center justify-center rounded-full bg-white/95 text-3xl text-brand shadow-xl transition-transform duration-200 group-hover:scale-105">
+                                <CaretRightOutlined className="ml-1" />
+                            </span>
+                        </button>
+                    )}
+                </div>
+            </div>
+        </section>
+    );
+};
+
 const HowItWorks = ({ innerRef, activeSection, onSelect }) => (
     <section ref={innerRef} className="scroll-mt-16 bg-white px-5 pt-14 pb-6">
         <div className="mx-auto max-w-5xl text-center">
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">How It Works</h2>
-            <p className="mx-auto mt-4 max-w-3xl text-base leading-relaxed text-gray-500">
-                Students annotate course readings together, turn their discussions into a shared knowledge
-                graph with AI agents, and co-write a synthesis that cites the ideas it builds on.
-            </p>
-            <p className="mt-6 text-sm text-gray-400">Click the icons to explore the workflow.</p>
-
-            <div className="mt-6 grid grid-cols-2 gap-x-2 gap-y-6 sm:grid-cols-3 md:flex md:items-start md:justify-center md:gap-1">
+            <div className="mt-10 grid grid-cols-2 gap-x-2 gap-y-6 sm:grid-cols-3 md:flex md:items-start md:justify-center md:gap-1">
                 {sections.map((section, index) => {
                     const active = index === activeSection;
                     return (
@@ -231,7 +273,7 @@ const Tutorial = () => {
     const howItWorksRef = useRef(null);
 
     useEffect(() => {
-        document.title = 'Synthesis AI Lab - Homepage';
+        document.title = 'SAIL - Synthesis AI Lab';
     }, []);
 
     const activeSection = useMemo(() => STEPS[stepIndex].sectionIndex, [stepIndex]);
@@ -245,6 +287,7 @@ const Tutorial = () => {
             <Header />
             <main>
                 <Hero onStart={scrollToHowItWorks} />
+                <VideoSection />
                 <HowItWorks innerRef={howItWorksRef} activeSection={activeSection} onSelect={selectSection} />
                 <StepViewer index={stepIndex} onChange={setStepIndex} />
                 <TeamSection />

@@ -28,5 +28,8 @@ fi
 echo "🚀 Pushing to main..."
 git push origin main
 
-echo "✅ Done! GitHub Actions will build and deploy the site to GitHub Pages."
-echo "🌍 Follow the progress at https://github.com/SynthesisAI-Lab/synthesisai-lab.github.io/actions"
+echo "🚀 Building and publishing to the gh-pages branch..."
+npm run deploy
+
+echo "✅ Done! Your changes have been pushed to the gh-pages branch."
+echo "🌍 It may take a few minutes for the changes to appear online."

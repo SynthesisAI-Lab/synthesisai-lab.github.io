@@ -8,7 +8,7 @@ import {
 import { sections } from './tutorialData';
 import TeamSection from './TeamSection';
 
-const APP_URL = 'http://74.249.196.43/v2/';
+const APP_URL = 'https://app.synthesis-ai-lab.org';
 
 const landingImage = new URL('./assets/tutorial_assets/v2/landing_page.png', import.meta.url).href;
 // Served as-is from public/, so the URL stays stable across builds.

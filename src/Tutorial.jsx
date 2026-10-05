@@ -1,7 +1,7 @@
-import React, { useState, useMemo, useCallback, useEffect, useRef } from 'react';
-import { Layout, Typography, Button, Tabs, theme, Row, Col, Grid, ConfigProvider } from 'antd';
-import { RocketOutlined, PlayCircleOutlined, LeftOutlined, RightOutlined, CommentOutlined, DeploymentUnitOutlined, EditOutlined, ArrowRightOutlined, FolderAddOutlined, TeamOutlined, HighlightOutlined, ExperimentOutlined } from '@ant-design/icons';
-import { getStartedSteps, courseSetupSteps, annotationSteps, synthesisCanvasSteps } from './tutorialData';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
+import { Layout, Typography, Button, theme, Row, Col, Grid, ConfigProvider } from 'antd';
+import { RocketOutlined, PlayCircleOutlined, LeftOutlined, RightOutlined, CommentOutlined, DeploymentUnitOutlined, EditOutlined, ArrowRightOutlined, LoginOutlined, TeamOutlined, HighlightOutlined, ExperimentOutlined } from '@ant-design/icons';
+import { sections } from './tutorialData';
 import TeamSection from './TeamSection';
 
 const { Header, Content, Footer } = Layout;
@@ -12,9 +12,9 @@ const APP_URL = 'http://74.249.196.43/v2/';
 
 const landingImage = new URL('./assets/tutorial_assets/v2/landing_page.png', import.meta.url).href;
 
-// Import techy font
+// Same heading font as the app header
 const fontLink = document.createElement('link');
-fontLink.href = 'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap';
+fontLink.href = 'https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@500;600;700&display=swap';
 fontLink.rel = 'stylesheet';
 document.head.appendChild(fontLink);
 
@@ -166,7 +166,7 @@ const StepViewer = ({ steps, onNextTab, onPrevTab, isActive, onStepChange, targe
                                 size="small"
                                 style={currentStep === 0 && onPrevTab ? { padding: '0 15px' } : {}}
                             >
-                                {currentStep === 0 && onPrevTab ? 'Previous Tab' : null}
+                                {currentStep === 0 && onPrevTab ? 'Previous' : null}
                             </Button>
                             <Button
                                 type="primary"
@@ -178,7 +178,7 @@ const StepViewer = ({ steps, onNextTab, onPrevTab, isActive, onStepChange, targe
                                 size="small"
                                 style={currentStep === steps.length - 1 ? { padding: '0 15px' } : {}}
                             >
-                                {currentStep === steps.length - 1 ? 'Next Tab' : null}
+                                {currentStep === steps.length - 1 ? 'Next' : null}
                             </Button>
                         </div>
                     </div>
@@ -190,14 +190,11 @@ const StepViewer = ({ steps, onNextTab, onPrevTab, isActive, onStepChange, targe
 
 const ProjectBigPicture = ({ innerRef, activeStep, onStepClick }) => {
     const screens = useBreakpoint();
-    const steps = [
-        { icon: <TeamOutlined />, title: <>Join<br />a Course</> },
-        { icon: <FolderAddOutlined />, title: <>Course & Module Setup<br />(instructor only)</> },
-        { icon: <HighlightOutlined />, title: <>Annotate & Discuss<br />the Readings</> },
-        { icon: <DeploymentUnitOutlined />, title: <>Knowledge Synthesis<br />Graph</> },
-        { icon: <CommentOutlined />, title: <>Iterate with Your Group<br />& AI Agents</> },
-        { icon: <EditOutlined />, title: <>Co-write<br />the Synthesis</> },
-    ];
+    const icons = [<LoginOutlined />, <HighlightOutlined />, <TeamOutlined />, <DeploymentUnitOutlined />, <CommentOutlined />, <EditOutlined />];
+    const steps = sections.map((section, i) => ({
+        icon: icons[i],
+        title: <>{section.label[0]}<br />{section.label[1]}</>,
+    }));
 
     return (
         <div ref={innerRef} style={{ padding: screens.md ? '10px 20px' : '10px 20px', background: '#fff' }}>
@@ -275,112 +272,42 @@ const Tutorial = ({ onGoHome }) => {
     } = theme.useToken();
     const screens = useBreakpoint();
 
-    const [activeTab, setActiveTab] = useState('1');
-    const [tabSteps, setTabSteps] = useState({ '1': 0, '2': 0, '3': 0, '4': 0 });
-    const [targetStepMap, setTargetStepMap] = useState({ '1': null, '2': null, '3': null, '4': null });
+    const [activeSection, setActiveSection] = useState(0);
+    const [targetStep, setTargetStep] = useState(null);
     const tutorialSectionRef = useRef(null);
     const howItWorksRef = useRef(null);
 
     useEffect(() => {
-        document.title = "Synthesis AI Lab Tutorial";
-        return () => {
-            document.title = "Synthesis AI Lab";
-        };
+        document.title = 'Synthesis AI Lab - Homepage';
     }, []);
 
     const scrollToTutorial = () => {
         howItWorksRef.current?.scrollIntoView({ behavior: 'smooth' });
     };
 
-    const scrollToSteps = () => {
-        tutorialSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
-    };
-
-    const updateTabStep = useCallback((tabKey, step) => {
-        setTabSteps(prev => ({ ...prev, [tabKey]: step }));
+    const goToSection = useCallback((index, step = 0) => {
+        setActiveSection(index);
+        setTargetStep(step);
+        setTimeout(() => setTargetStep(null), 500);
     }, []);
 
-    // How It Works icon -> [tab, step]
-    const BIG_PICTURE_TARGETS = [['1', 0], ['2', 0], ['3', 0], ['4', 1], ['4', 3], ['4', 4]];
+    const handleBigPictureClick = (index) => goToSection(index);
 
-    const handleBigPictureClick = (index) => {
-        const [targetTab, targetStep] = BIG_PICTURE_TARGETS[index] || ['1', 0];
-
-        setActiveTab(targetTab);
-        setTargetStepMap(prev => ({ ...prev, [targetTab]: targetStep }));
-        setTimeout(() => {
-            setTargetStepMap(prev => ({ ...prev, [targetTab]: null }));
-        }, 500);
-    };
-
-    const getActiveBigPictureStep = () => {
-        if (activeTab === '1') return 0;
-        if (activeTab === '2') return 1;
-        if (activeTab === '3') return 2;
-        if (activeTab === '4') {
-            const step = tabSteps['4'];
-            if (step <= 1) return 3;
-            if (step <= 3) return 4;
-            return 5;
+    const handleNextSection = useCallback(() => {
+        if (activeSection < sections.length - 1) {
+            scrollToTutorial();
+            goToSection(activeSection + 1);
         }
-        return -1;
-    };
+    }, [activeSection, goToSection]);
 
-    const handleNextTab = useCallback(() => {
-        setActiveTab(prev => {
-            const nextKey = parseInt(prev) + 1;
-            if (nextKey <= 4) {
-                scrollToTutorial();
-                return String(nextKey);
-            }
-            return prev;
-        });
-    }, []);
+    const handlePrevSection = useCallback(() => {
+        if (activeSection > 0) {
+            scrollToTutorial();
+            goToSection(activeSection - 1);
+        }
+    }, [activeSection, goToSection]);
 
-    const handlePrevTab = useCallback(() => {
-        setActiveTab(prev => {
-            const prevKey = parseInt(prev) - 1;
-            if (prevKey >= 1) {
-                scrollToTutorial();
-                return String(prevKey);
-            }
-            return prev;
-        });
-    }, []);
-
-    const items = useMemo(() => [
-        {
-            key: '1',
-            label: 'Get Started',
-            children: <StepViewer steps={getStartedSteps} onNextTab={handleNextTab} isActive={activeTab === '1'} onStepChange={(s) => updateTabStep('1', s)} targetStep={targetStepMap['1']} />,
-        },
-        {
-            key: '2',
-            label: 'Course Setup',
-            children: <StepViewer steps={courseSetupSteps} onNextTab={handleNextTab} onPrevTab={handlePrevTab} isActive={activeTab === '2'} onStepChange={(s) => updateTabStep('2', s)} targetStep={targetStepMap['2']} />,
-        },
-        {
-            key: '3',
-            label: 'Annotation Space',
-            children: <StepViewer steps={annotationSteps} onNextTab={handleNextTab} onPrevTab={handlePrevTab} isActive={activeTab === '3'} onStepChange={(s) => updateTabStep('3', s)} targetStep={targetStepMap['3']} />,
-        },
-        {
-            key: '4',
-            label: 'Synthesis Canvas',
-            children: <StepViewer steps={synthesisCanvasSteps} onPrevTab={handlePrevTab} isActive={activeTab === '4'} onStepChange={(s) => updateTabStep('4', s)} targetStep={targetStepMap['4']} />,
-        },
-    ], [handleNextTab, handlePrevTab, activeTab, updateTabStep, targetStepMap]);
-
-    const renderTabBar = useCallback((props, DefaultTabBar) => (
-        <div style={{
-            position: 'sticky',
-            top: 0,
-            zIndex: 10,
-            background: colorBgContainer,
-        }}>
-            <DefaultTabBar {...props} style={{ marginBottom: 0 }} />
-        </div>
-    ), [colorBgContainer]);
+    const section = sections[activeSection];
 
     return (
         <ConfigProvider
@@ -393,7 +320,7 @@ const Tutorial = ({ onGoHome }) => {
             <Layout style={{ height: '100vh', background: '#fff' }}>
             <Header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(255, 255, 255, 0.9)', backdropFilter: 'blur(10px)', padding: '0 24px', borderBottom: '1px solid #f0f0f0', zIndex: 100 }}>
                 <div style={{ color: '#001529', fontSize: '1.2rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: 10 }}>
-                    Synthesis AI Lab <span style={{ fontWeight: 'normal', fontSize: '0.9rem', color: '#888', marginLeft: 8 }}>Tutorial</span>
+                    Synthesis AI Lab <span style={{ fontWeight: 'normal', color: '#888' }}>- Homepage</span>
                 </div>
                 <div style={{ display: 'flex', gap: 8 }}>
                     {screens.sm && (
@@ -419,7 +346,7 @@ const Tutorial = ({ onGoHome }) => {
                     overflow: 'hidden'
                 }}>
                     <div style={{ textAlign: 'center', maxWidth: 800, marginBottom: 40 }}>
-                        <Title level={1} style={{ fontSize: '2.8rem', marginBottom: 16, letterSpacing: '-0.5px', fontFamily: "'JetBrains Mono', monospace", fontWeight: 700 }}>
+                        <Title level={1} style={{ fontSize: '2.8rem', marginBottom: 16, letterSpacing: '-0.5px', fontFamily: "'Crimson Pro', Georgia, serif", fontWeight: 600 }}>
                             SAIL: <span style={{ color: '#4f46e5' }}> Synthesis</span> AI Lab
                         </Title>
                         <Paragraph style={{ fontSize: '1.2rem', color: '#585858', lineHeight: 1.6, marginBottom: 8 }}>
@@ -491,18 +418,20 @@ const Tutorial = ({ onGoHome }) => {
                     </div>
                 </div>
 
-                <ProjectBigPicture innerRef={howItWorksRef} activeStep={getActiveBigPictureStep()} onStepClick={handleBigPictureClick} />
+                <ProjectBigPicture innerRef={howItWorksRef} activeStep={activeSection} onStepClick={handleBigPictureClick} />
 
                 <div ref={tutorialSectionRef} style={{ display: 'flex', flexDirection: 'column' }}>
-                    <div style={{ background: colorBgContainer, flex: 1, margin: '0 auto', width: '100%', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
-
-                        <Tabs
-                            activeKey={activeTab}
-                            onChange={setActiveTab}
-                            items={items}
-                            size="large"
-                            centered={screens.md}
-                            renderTabBar={renderTabBar}
+                    <div style={{ background: colorBgContainer, flex: 1, margin: '0 auto', width: '100%', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', paddingTop: 24 }}>
+                        <Title level={3} style={{ textAlign: 'center', margin: '0 20px', fontSize: '1.5rem', color: '#4f46e5' }}>
+                            {section.title}
+                        </Title>
+                        <StepViewer
+                            key={section.key}
+                            steps={section.steps}
+                            onNextTab={activeSection < sections.length - 1 ? handleNextSection : undefined}
+                            onPrevTab={activeSection > 0 ? handlePrevSection : undefined}
+                            isActive
+                            targetStep={targetStep}
                         />
                     </div>
                 </div>

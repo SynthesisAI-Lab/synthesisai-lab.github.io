@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import { AnimatePresence, motion as Motion } from 'motion/react';
 import {
-    RocketOutlined, PlayCircleOutlined, CaretRightOutlined, LeftOutlined, RightOutlined, ArrowRightOutlined,
+    ExportOutlined, PlayCircleOutlined, CaretRightOutlined, LeftOutlined, RightOutlined, ArrowRightOutlined,
     CommentOutlined, DeploymentUnitOutlined, EditOutlined, LoginOutlined, TeamOutlined,
     HighlightOutlined, ExperimentOutlined,
 } from '@ant-design/icons';
@@ -38,17 +38,17 @@ const parseBoldText = (text) =>
 
 const Header = () => (
     <header className="sticky top-0 z-50 border-b border-gray-100 bg-white/90 backdrop-blur-md">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5">
-            <a href="/" className="flex items-center gap-2.5 text-lg font-bold tracking-tight text-gray-900">
+        <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:h-16 sm:px-5">
+            <a href="/" className="flex items-center gap-2.5 text-lg font-bold tracking-tight whitespace-nowrap text-gray-900">
                 <img src={LOGO_URL} alt="" className="size-7" />
-                SAIL <span className="font-normal">- Synthesis AI Lab</span>
+                SAIL <span className="hidden font-normal md:inline">- Synthesis AI Lab</span>
             </a>
             <div className="flex items-center gap-2">
-                <a href={APP_URL} className="btn-ghost hidden h-9 px-4 text-sm sm:inline-flex">
+                <a href={APP_URL} className="btn-ghost hidden h-9 px-4 text-sm whitespace-nowrap sm:inline-flex">
                     <ExperimentOutlined /> Try the Demo
                 </a>
-                <a href={APP_URL} className="btn-primary h-9 px-4 text-sm">
-                    <RocketOutlined /> Launch App
+                <a href={APP_URL} className="btn-primary h-9 px-4 text-sm whitespace-nowrap">
+                    <ExportOutlined /> Launch App
                 </a>
             </div>
         </div>
@@ -56,26 +56,26 @@ const Header = () => (
 );
 
 const Hero = ({ onStart }) => (
-    <section className="overflow-hidden bg-linear-to-b from-[#f0f5ff] to-[#f8fafc] px-5 pt-16">
+    <section className="overflow-hidden bg-linear-to-b from-[#f0f5ff] to-[#f8fafc] px-5 pt-10 sm:pt-16">
         <div className="mx-auto max-w-3xl text-center">
-            <h1 className="font-heading text-5xl font-semibold tracking-tight text-gray-900 sm:text-6xl">
+            <h1 className="font-heading text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl md:text-6xl">
                 SAIL: <span className="text-brand">Synthesis</span> AI Lab
             </h1>
-            <p className="mt-5 text-lg text-gray-600 sm:text-xl">
+            <p className="mt-4 text-base text-gray-600 sm:mt-5 sm:text-lg md:text-xl">
                 Connect ideas. Synthesize knowledge. Spark creative knowledge work.
             </p>
-            <p className="mt-2 text-base text-gray-500">
+            <p className="mt-2 text-sm text-gray-500 sm:text-base">
                 Grounded in Learning Sciences and HCI research.
             </p>
 
-            <div className="mt-10 flex flex-wrap justify-center gap-3">
-                <button type="button" onClick={onStart} className="btn-outline h-11 px-6 text-[15px]">
+            <div className="mt-8 flex flex-wrap justify-center gap-2.5 sm:mt-10 sm:gap-3">
+                <button type="button" onClick={onStart} className="btn-outline h-10 px-5 text-sm sm:h-11 sm:px-6 sm:text-[15px]">
                     <PlayCircleOutlined /> Start Tutorial
                 </button>
-                <a href={APP_URL} className="btn-outline h-11 px-6 text-[15px]">
-                    <RocketOutlined /> Launch App
+                <a href={APP_URL} className="btn-outline h-10 px-5 text-sm sm:h-11 sm:px-6 sm:text-[15px]">
+                    <ExportOutlined /> Launch App
                 </a>
-                <a href={APP_URL} className="btn-outline h-11 px-6 text-[15px]">
+                <a href={APP_URL} className="btn-outline h-10 px-5 text-sm sm:h-11 sm:px-6 sm:text-[15px]">
                     <ExperimentOutlined /> Try the Demo
                 </a>
             </div>
@@ -89,7 +89,7 @@ const Hero = ({ onStart }) => (
             initial={{ opacity: 0, y: 32 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: 'easeOut', delay: 0.1 }}
-            className="relative mx-auto mt-14 -mb-5 w-full max-w-[min(1280px,180vh)] overflow-hidden rounded-t-2xl border-4 border-b-0 border-white/80 bg-brand-light shadow-[0_20px_60px_rgba(15,23,42,0.15)]"
+            className="relative mx-auto mt-10 -mb-5 w-full max-w-[min(1280px,180vh)] overflow-hidden rounded-t-xl border-2 border-b-0 border-white/80 bg-brand-light shadow-[0_20px_60px_rgba(15,23,42,0.15)] sm:mt-14 sm:rounded-t-2xl sm:border-4"
         >
             <img src={landingImage} alt="Synthesis AI Lab Synthesis Canvas" className="block h-auto w-full" />
         </Motion.div>
@@ -108,10 +108,10 @@ const VideoSection = () => {
     };
 
     return (
-        <section className="bg-white px-5 pt-20 pb-6">
+        <section className="bg-white px-4 pt-14 pb-4 sm:px-5 sm:pt-20 sm:pb-6">
             <div className="mx-auto max-w-5xl text-center">
-                <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">See SAIL in Action</h2>
-                <div className="relative mt-8 aspect-video overflow-hidden rounded-2xl bg-gray-900 shadow-[0_20px_60px_rgba(15,23,42,0.18)] ring-1 ring-gray-200/80">
+                <h2 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl md:text-4xl">See SAIL in Action</h2>
+                <div className="relative mt-6 aspect-video sm:mt-8 overflow-hidden rounded-2xl bg-gray-900 shadow-[0_20px_60px_rgba(15,23,42,0.18)] ring-1 ring-gray-200/80">
                     <video
                         ref={videoRef}
                         src={VIDEO_URL}
@@ -128,7 +128,7 @@ const VideoSection = () => {
                             aria-label="Play video"
                             className="group absolute inset-0 flex cursor-pointer items-center justify-center bg-gray-900/10 transition-colors hover:bg-gray-900/20"
                         >
-                            <span className="flex size-20 items-center justify-center rounded-full bg-white/95 text-3xl text-brand shadow-xl transition-transform duration-200 group-hover:scale-105">
+                            <span className="flex size-14 items-center justify-center rounded-full bg-white/95 text-2xl text-brand sm:size-20 sm:text-3xl shadow-xl transition-transform duration-200 group-hover:scale-105">
                                 <CaretRightOutlined className="ml-1" />
                             </span>
                         </button>
@@ -140,10 +140,10 @@ const VideoSection = () => {
 };
 
 const HowItWorks = ({ innerRef, activeSection, onSelect }) => (
-    <section ref={innerRef} className="scroll-mt-16 bg-white px-5 pt-14 pb-6">
+    <section ref={innerRef} className="scroll-mt-14 bg-white px-4 pt-12 pb-4 sm:scroll-mt-16 sm:px-5 sm:pt-14 sm:pb-6">
         <div className="mx-auto max-w-5xl text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">How It Works</h2>
-            <div className="mt-10 grid grid-cols-2 gap-x-2 gap-y-6 sm:grid-cols-3 md:flex md:items-start md:justify-center md:gap-1">
+            <h2 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl md:text-4xl">How It Works</h2>
+            <div className="mt-8 grid grid-cols-3 gap-x-1 gap-y-5 sm:mt-10 md:flex md:items-start md:justify-center md:gap-1">
                 {sections.map((section, index) => {
                     const active = index === activeSection;
                     return (
@@ -152,10 +152,10 @@ const HowItWorks = ({ innerRef, activeSection, onSelect }) => (
                                 type="button"
                                 onClick={() => onSelect(index)}
                                 aria-current={active ? 'step' : undefined}
-                                className="group flex w-[7.5rem] cursor-pointer flex-col items-center gap-2.5 justify-self-center text-center md:w-32"
+                                className="group flex w-full cursor-pointer flex-col items-center gap-2 justify-self-center text-center sm:w-[7.5rem] sm:gap-2.5 md:w-32"
                             >
                                 <span
-                                    className={`flex size-[68px] items-center justify-center rounded-full text-3xl transition-all duration-300 ${
+                                    className={`flex size-14 items-center justify-center rounded-full text-2xl transition-all duration-300 sm:size-[68px] sm:text-3xl ${
                                         active
                                             ? 'scale-105 bg-brand text-white shadow-lg shadow-brand/30'
                                             : 'bg-gray-100 text-brand group-hover:bg-brand-light'
@@ -163,7 +163,7 @@ const HowItWorks = ({ innerRef, activeSection, onSelect }) => (
                                 >
                                     {SECTION_ICONS[index]}
                                 </span>
-                                <span className={`text-[13px] leading-snug ${active ? 'font-semibold text-gray-900' : 'text-gray-600'}`}>
+                                <span className={`text-xs leading-snug sm:text-[13px] ${active ? 'font-semibold text-gray-900' : 'text-gray-600'}`}>
                                     {section.label[0]}<br />{section.label[1]}
                                 </span>
                             </button>
@@ -210,8 +210,8 @@ const StepViewer = ({ index, onChange }) => {
     const transition = { duration: 0.25, ease: 'easeOut' };
 
     return (
-        <section className="bg-white px-5 py-10">
-            <div className="mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-12">
+        <section className="bg-white px-4 py-6 sm:px-5 sm:py-10">
+            <div className="mx-auto grid max-w-6xl items-center gap-6 sm:gap-10 lg:grid-cols-12">
                 <div className="lg:col-span-7">
                     <div className="aspect-[9/5] overflow-hidden rounded-xl bg-gray-100 shadow-[0_20px_40px_rgba(15,23,42,0.08)] ring-1 ring-gray-200/80">
                         <AnimatePresence mode="wait" custom={direction} initial={false}>
@@ -242,7 +242,7 @@ const StepViewer = ({ index, onChange }) => {
                             exit="exit"
                             transition={transition}
                         >
-                            <h3 className="text-2xl font-bold tracking-tight text-gray-900">{step.title}</h3>
+                            <h3 className="text-xl font-bold tracking-tight text-gray-900 sm:text-2xl">{step.title}</h3>
                             {Array.isArray(step.description) ? (
                                 <ol className="mt-4 list-decimal space-y-2 pl-5 text-[15px] leading-relaxed text-gray-600">
                                     {step.description.map((item, i) => <li key={i}>{parseBoldText(item)}</li>)}
@@ -253,7 +253,7 @@ const StepViewer = ({ index, onChange }) => {
                         </Motion.div>
                     </AnimatePresence>
 
-                    <div className="mt-8 flex items-center gap-4">
+                    <div className="mt-6 flex items-center gap-4 sm:mt-8">
                         <button type="button" className="btn-icon" onClick={() => go(index - 1)} disabled={index === 0} aria-label="Previous step">
                             <LeftOutlined />
                         </button>

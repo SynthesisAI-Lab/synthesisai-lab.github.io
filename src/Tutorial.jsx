@@ -9,6 +9,7 @@ import { sections } from './tutorialData';
 import TeamSection from './TeamSection';
 
 const APP_URL = 'https://app.synthesis-ai-lab.org';
+const DEMO_URL = 'https://app.synthesis-ai-lab.org/?demo';
 
 const landingImage = new URL('./assets/tutorial_assets/v2/landing_page.png', import.meta.url).href;
 // Served as-is from public/, so the URL stays stable across builds.
@@ -44,7 +45,7 @@ const Header = () => (
                 SAIL <span className="hidden font-normal md:inline">- Synthesis AI Lab</span>
             </a>
             <div className="flex items-center gap-2">
-                <a href={APP_URL} className="btn-ghost hidden h-9 px-4 text-sm whitespace-nowrap sm:inline-flex">
+                <a href={DEMO_URL} className="btn-ghost hidden h-9 px-4 text-sm whitespace-nowrap sm:inline-flex">
                     <ExperimentOutlined /> Try the Demo
                 </a>
                 <a href={APP_URL} className="btn-primary h-9 px-4 text-sm whitespace-nowrap">
@@ -75,7 +76,7 @@ const Hero = ({ onStart }) => (
                 <a href={APP_URL} className="btn-outline h-10 px-5 text-sm sm:h-11 sm:px-6 sm:text-[15px]">
                     <ExportOutlined /> Launch App
                 </a>
-                <a href={APP_URL} className="btn-outline h-10 px-5 text-sm sm:h-11 sm:px-6 sm:text-[15px]">
+                <a href={DEMO_URL} className="btn-outline h-10 px-5 text-sm sm:h-11 sm:px-6 sm:text-[15px]">
                     <ExperimentOutlined /> Try the Demo
                 </a>
             </div>
